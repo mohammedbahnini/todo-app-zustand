@@ -1,6 +1,5 @@
 import classNames from 'classnames'
-import React, { useContext, useState } from 'react'
-import { AppContext } from '../../contexts/AppContext';
+import React from 'react'
 import { AppStore } from '../../store/app-store';
 
 function FilterItem(props) {
@@ -9,7 +8,7 @@ function FilterItem(props) {
     const  isActive  = currentFilter === children;
     
     
-    const btn = classNames('font-bold text-base capitalize   ' , { 
+    const btn = classNames('font-bold text-base capitalize  transition-theme' , { 
         'text-light-blue' : isActive ,
         'text-dark-gray ' : !isActive  , 
         'hover:text-white ' : theme === 'dark' && !isActive, 

@@ -8,6 +8,12 @@
     @apply min-h-screen font-josefin;
   }
 
+    .task-container:hover .task-container--move{
+      opacity: 1;
+    }
+    .transition-theme{
+      @apply transition-colors duration-200;
+    }
 }
 
 @layer components{

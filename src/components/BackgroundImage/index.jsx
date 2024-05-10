@@ -1,9 +1,8 @@
-import React, { useContext, useReducer } from 'react'
-import { AppContext } from '../../contexts/AppContext'
+import React from 'react'
 import { AppStore } from '../../store/app-store'
 
 function BackgroundImage() {
-    const { theme   } =AppStore( state => state)
+    const { theme   } = AppStore( state => state)
 
     return (
         <div className='absolute h-[200px] md:h-[300px] top-0 left-0 right-0 -z-[1]  '>

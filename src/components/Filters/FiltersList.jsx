@@ -1,14 +1,14 @@
-import React, { useContext } from 'react'
+import Reac from 'react'
 import FilterItem from './FilterItem'
 import classNames from 'classnames';
 import { AppStore } from '../../store/app-store';
 
-function Filters(props) {
+function FiltersList(props) {
 
     const { theme, filters  } = AppStore( state => state );
  
 
-    const style = classNames('flex items-center justify-center rounded-[5px]  ', props.className, {
+    const style = classNames('flex items-center justify-center rounded-[5px] transition-theme ', props.className, {
         'bg-white  shadow-[0_35px_50px_-15px_rgba(194,195,214,0.5)]': theme === 'light',
         'bg-very-dark-grayish-violet': theme === 'dark'
     });
@@ -28,4 +28,4 @@ function Filters(props) {
     )
 }
 
-export default Filters
+export default FiltersList

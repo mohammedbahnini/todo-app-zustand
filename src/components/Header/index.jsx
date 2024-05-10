@@ -1,5 +1,5 @@
 import React from 'react'
-import ThemeSwitch from '../Tasks/ThemeSwitch'
+import ThemeSwitch from './ThemeSwitch'
 
 function Header() {
     return (

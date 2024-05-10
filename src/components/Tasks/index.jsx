@@ -1,78 +1,54 @@
-import React, { useContext, useEffect, useState } from 'react'
-import TaskItem from './TaskItem'
-import TasksListFooter from './TasksListFooter'
-import { AppContext } from '../../contexts/AppContext'
-import classNames from 'classnames';
-import { Reorder } from 'framer-motion';
-import NoTasksFound from './NoTasksFound';
+import React from 'react'
 import { AppStore } from '../../store/app-store';
+import TasksContainer from './TasksContainer';
+import { DndContext, closestCorners, useSensor, PointerSensor, KeyboardSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, arrayMove, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import TasksList from './TasksList';
+import TasksListFooter from './TasksListFooter';
 
-function TasksList() {
+function Tasks() {
 
-    const { theme, tasks, currentFilter , reorderTasks } = AppStore(state => state);
-    const [filtredTasks, setFiltredTasks] = useState([...tasks]);
+    const { theme, tasks, reorderTasks } = AppStore(state => state);
 
-    useEffect(() => {
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
 
-        switch (currentFilter) {
-            case 'all':
-                setFiltredTasks(tasks);
-                break;
-            case 'active':
-                    setFiltredTasks(() => {
-                        const newTasks = [...tasks.filter(item => !item.isCompleted)];
-                        return newTasks;
-                    });
-                break;
-            case 'completed':
-                setFiltredTasks(() => {
-                    const newTasks = [...tasks.filter(item => item.isCompleted)];
-                    return newTasks;
-                });
-                break;
-            default:
-                setFiltredTasks(tasks);
-                break;
+
+
+    const handleDragEnd = (e) => {
+        const { active, over } = e;
+
+        if (active.id !== over.id) {
+            const activeIndex = tasks.findIndex(task => task.id === active.id);
+            const overIndex = tasks.findIndex(task => task.id === over.id);
+
+
+            console.log(activeIndex, overIndex);
+            const newSortedTasks = arrayMove(tasks, activeIndex, overIndex);
+            reorderTasks(newSortedTasks);
         }
-
-    }, [currentFilter , tasks ]);
-
-
-
-
-    const tasksWrapperStyle = classNames('rounded-[5px] text-xs mt-4 divide-y-[1px] ', {
-        'bg-very-dark-grayish-violet divide-pale-gray/10  ': theme === 'dark',
-        'bg-white': theme === 'light',
-        'shadow-[0_35px_50px_-15px_rgba(194,195,214,0.5)] ': theme === 'light'
-    });
-
-    const handleReorder = (newFiltredTasks) => {
-        //reorderTasks(newFiltredTasks)
-        setFiltredTasks(newFiltredTasks);
     }
 
 
     return (
 
 
-        <>
-            <Reorder.Group axis='y' values={tasks} as='div' onReorder={handleReorder} >
+        <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd} sensors={sensors} >
 
-                <div className={tasksWrapperStyle} >
-                    {
-                        filtredTasks.length > 0 ?
-                            filtredTasks.map((task) => <TaskItem key={task.id} task={task} theme={theme} />)
-                            :
-                            <NoTasksFound theme={theme} />
+            <SortableContext items={tasks} id='id-1' strategy={verticalListSortingStrategy}>
+                <TasksContainer theme={theme}  >
+                  <TasksList tasks={tasks} theme={theme} />
+                  <TasksListFooter />
+                </TasksContainer>
+            </SortableContext>
 
-                    }
-                    <TasksListFooter />
-                </div>
-
-            </Reorder.Group>
-        </>
+        </DndContext>
 
     )
 }
 
-export default TasksList
+export default Tasks

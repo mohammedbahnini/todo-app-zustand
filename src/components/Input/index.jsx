@@ -4,12 +4,12 @@ import {  v4 as uuid } from 'uuid';
 import { AppStore } from '../../store/app-store';
 
 function Input() {
-    const { theme ,  addTask } =AppStore( state => state );
+    const { theme ,  addTask , currentFilter  } =AppStore( state => state );
     const [errorMessage, setErrorMessage] = useState('');
     const refInput = useRef(null);
 
     // defining styles
-    const divStyle = classNames('rounded-[5px] py-[18px] px-5 mt-10 md:py-6  ',
+    const divStyle = classNames('rounded-[5px] py-[18px] px-5 mt-10 md:py-6 transition-theme ',
         {
             'bg-very-dark-grayish-violet': theme === 'dark',
             'bg-white': theme === 'light'
@@ -17,7 +17,7 @@ function Input() {
     const circleStyle = classNames('aspect-square w-5 border-[1px] border-light-gray rounded-full md:w-6 ', {
         'opacity-20': theme === 'dark'
     });
-    const inputStyle = classNames('w-full border-none outline-none  text-xs bg-transparent md:text-lg ', {
+    const inputStyle = classNames('w-full border-none outline-none  text-xs bg-transparent md:text-lg transition-theme', {
         'text-dark-blue': theme === 'light',
         'text-light-gray': theme === 'dark'
     });
@@ -32,10 +32,12 @@ function Input() {
         }
         else {
 
+
             addTask({
                 id : uuid() , 
                 text : refInput.current.value , 
-                isCompleted : false
+                isCompleted : false , 
+                filterMatched : currentFilter === 'all' || currentFilter === 'active'
             });
             refInput.current.value = '';
             setErrorMessage('');

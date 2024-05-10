@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { AppStore } from '../../store/app-store';
 
 function ThemeSwitch() {
