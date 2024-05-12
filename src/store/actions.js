@@ -33,10 +33,10 @@ export const ActionChangeTaskStatus = (set, taskID) => {
 export const ActionRemoveTask = (set, taskID) => {
 
     set(prevState => {
-        const newTaks = [...prevState.tasks.filter(task => task.id !== taskID)];
+        const newTasks = [...prevState.tasks.filter(task => task.id !== taskID)];
         setLocalStorageTasks(newTasks);
         return {
-            tasks: [...newTaks]
+            tasks: [...newTasks]
         }
     })
 }

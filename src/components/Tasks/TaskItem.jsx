@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React from 'react'
+import React, { memo, useMemo } from 'react'
 import { AppStore } from '../../store/app-store';
 import { defaultAnimateLayoutChanges, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -7,18 +7,17 @@ import TaskCompletedMark from './TaskGradientCircle';
 import { MeasuringStrategy } from '@dnd-kit/core';
 
 
-function TaskItem(props) {
+
+const TaskItem =  (props) => {
     const { changeTaskStatus, removeTask } = AppStore(state => state);
     const { task, theme , activeId} = props;
     const { isCompleted, id } = task;
+
+
+
     
 
-    const { attributes, listeners, setNodeRef, transform, transition  } = useSortable({
-        id , 
-        transform : {
-            'scale' : '2'
-        }
-    });
+    const { attributes, listeners, setNodeRef, transform, transition  } = useSortable({ id });
 
     const style = {
         transform: CSS.Transform.toString(transform),
@@ -78,7 +77,7 @@ function TaskItem(props) {
                 <div className={taskWrapperStyle} onClick={handleChangeTaskStatus} >
                     {isCompleted && <TaskCompletedMark handleChangeTaskStatus={handleChangeTaskStatus} />}
                 </div>
-                <p className={textStyle} >{task.text}</p>
+                <p className={textStyle} >{task.text} <br />{new Date().toTimeString()} </p>
                 <div className='w-3 aspect-square cursor-pointer ' onClick={handleRemove}>
                     <img src="/icon-cross.svg" alt="" />
                 </div>
