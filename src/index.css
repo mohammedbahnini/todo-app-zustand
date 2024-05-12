@@ -12,7 +12,7 @@
       opacity: 1;
     }
     .transition-theme{
-      @apply transition-colors duration-200;
+      @apply transition-colors duration-100;
     }
 }
 

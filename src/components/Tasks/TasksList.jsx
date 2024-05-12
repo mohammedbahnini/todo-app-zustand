@@ -3,8 +3,7 @@ import TaskItem from './TaskItem';
 import NoTasksFound from './NoTasksFound';
 
 function TasksList(props) {
-    const { tasks, theme } = props;
-    console.log(tasks.findIndex(task => task.filterMatched) >= 0);
+    const { tasks, theme , activeId } = props;
 
     return (
         <>
@@ -15,7 +14,12 @@ function TasksList(props) {
                     :
                     tasks
                         .filter(task => task.filterMatched)
-                        .map((task, index) => <TaskItem key={task.id} task={task} theme={theme} index={index} />)
+                        .map((task, index) => <TaskItem 
+                        key={task.id} 
+                        task={task} 
+                        theme={theme} 
+                        index={index}
+                        activeId={activeId} />)
             }
         </>
     )

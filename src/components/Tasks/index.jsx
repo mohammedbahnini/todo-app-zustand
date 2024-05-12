@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { AppStore } from '../../store/app-store';
 import TasksContainer from './TasksContainer';
 import { DndContext, closestCorners, useSensor, PointerSensor, KeyboardSensor, useSensors } from '@dnd-kit/core';
@@ -16,33 +16,48 @@ function Tasks() {
             coordinateGetter: sortableKeyboardCoordinates,
         })
     );
+    const [activeID, setActiveID] = useState(null);
 
 
 
     const handleDragEnd = (e) => {
         const { active, over } = e;
-
+        setActiveID(null);
         if (active.id !== over.id) {
+
+
             const activeIndex = tasks.findIndex(task => task.id === active.id);
             const overIndex = tasks.findIndex(task => task.id === over.id);
 
 
-            console.log(activeIndex, overIndex);
             const newSortedTasks = arrayMove(tasks, activeIndex, overIndex);
             reorderTasks(newSortedTasks);
+
         }
+    }
+
+    const handleDragStart = (e) => {
+        setActiveID(e.active.id);
+        console.log(e);
     }
 
 
     return (
 
 
-        <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd} sensors={sensors} >
+        <DndContext
+            collisionDetection={closestCorners}
+            onDragEnd={handleDragEnd}
+            sensors={sensors}
+            onDragStart={handleDragStart}
 
-            <SortableContext items={tasks} id='id-1' strategy={verticalListSortingStrategy}>
+
+        >
+
+            <SortableContext items={tasks} id='id-1' strategy={verticalListSortingStrategy}  >
                 <TasksContainer theme={theme}  >
-                  <TasksList tasks={tasks} theme={theme} />
-                  <TasksListFooter />
+                    <TasksList tasks={tasks} theme={theme} activeId={activeID} />
+                    <TasksListFooter />
                 </TasksContainer>
             </SortableContext>
 
